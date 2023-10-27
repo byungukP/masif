@@ -82,5 +82,5 @@ else:
     learning_obj.saver.restore(learning_obj.session, params['model_dir']+'model')
 
 # edit num_iterations ARG for epoch number
-train_masif_site(learning_obj, params, num_iterations=50)
+train_masif_site(learning_obj, params)
 
