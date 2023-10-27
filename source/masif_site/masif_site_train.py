@@ -15,6 +15,7 @@ Released under an Apache License 2.0
 
 params = masif_opts["site"]
 
+### if IndexError: commented out the following if statements ###
 if len(sys.argv) > 0:
     custom_params_file = sys.argv[1]
     custom_params = importlib.import_module(custom_params_file, package=None)
@@ -43,7 +44,7 @@ if "n_theta" in params:
         n_thetas=params["n_theta"],
         n_rhos=params["n_rho"],
         n_rotations=params["n_rotations"],
-        idx_gpu="/gpu:1",
+        idx_gpu="/device:GPU:0",
         feat_mask=params["feat_mask"],
         n_conv_layers=params["n_conv_layers"],
     )
@@ -53,7 +54,7 @@ else:
         n_thetas=4,
         n_rhos=3,
         n_rotations=4,
-        idx_gpu="/gpu:1",
+        idx_gpu="/device:GPU:0",
         feat_mask=params["feat_mask"],
         n_conv_layers=params["n_conv_layers"],
     )
@@ -69,5 +70,6 @@ else:
     print ('Reading pre-trained network')
     learning_obj.saver.restore(learning_obj.session, params['model_dir']+'model')
 
-train_masif_site(learning_obj, params)
+# edit num_iterations ARG for epoch number
+train_masif_site(learning_obj, params, num_iterations=50)
 

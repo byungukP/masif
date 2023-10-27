@@ -308,7 +308,7 @@ def train_masif_site(
         )
         flat_all_test_labels = np.concatenate(all_test_labels, axis=0)
         flat_all_test_scores = np.concatenate(all_test_scores, axis=0)
-        outstr += "Testing auc (all points): {:.2f}".format(
+        outstr += "Testing auc (all points): {:.2f}\n".format(
             metrics.roc_auc_score(flat_all_test_labels, flat_all_test_scores)
         )
         outstr += "Epoch took {:2f}s\n".format(time.time() - tic)
