@@ -88,8 +88,8 @@ def train_masif_site(
         list_val_names = []
         list_training_acc = []
         list_val_acc = []
-        logfile.write("Starting epoch {}".format(num_iter))
-        print("Starting epoch {}".format(num_iter))
+        logfile.write("Starting epoch {}\n".format(num_iter))
+        print("Starting epoch {}\n".format(num_iter))
         tic = time.time()
         all_training_labels = []
         all_training_scores = []
