@@ -85,6 +85,12 @@ else:
     print ('Reading pre-trained network')
     learning_obj.saver.restore(learning_obj.session, params['model_dir']+'model')
 
+# os.makedirs(dirs) for out_pred_dir, out_surf_dir
+if not os.path.exists(params["out_pred_dir"]):
+    os.makedirs(params["out_pred_dir"])
+if not os.path.exists(params["out_surf_dir"]):
+    os.makedirs(params["out_surf_dir"])
+
 # edit num_iterations ARG for epoch number
 train_masif_site(learning_obj, params)
 
