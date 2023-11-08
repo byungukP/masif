@@ -92,5 +92,5 @@ if not os.path.exists(params["out_surf_dir"]):
     os.makedirs(params["out_surf_dir"])
 
 # edit num_iterations ARG for epoch number
-train_masif_site(learning_obj, params)
+train_masif_site(learning_obj, params, num_iterations=params['epoch_num'])
 
