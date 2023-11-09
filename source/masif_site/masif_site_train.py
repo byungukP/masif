@@ -5,6 +5,7 @@ from IPython.core.debugger import set_trace
 import importlib
 import sys
 from default_config.masif_opts import masif_opts
+import tensorflow as tf
 
 """
 masif_site_train.py: Entry function to train MaSIF-site.
@@ -16,7 +17,7 @@ Released under an Apache License 2.0
 params = masif_opts["site"]
 
 ### if IndexError: commented out the following if statements ###
-### editted the following to parse HTC argument as custom_parameters for training
+### edited the following to parse HTC argument as custom_parameters for training
 ### sys.argv[1] = custom_params.py absolute path
 if len(sys.argv) > 1:
     custom_params_file = sys.argv[1]
@@ -49,6 +50,11 @@ def mask_input_feat(input_feat, mask):
 
 if "pids" not in params:
     params["pids"] = ["p1", "p2"]
+
+# Confirm that TensorFlow is using the GPU
+physical_devices = tf.config.list_physical_devices('GPU')
+print("Num GPUs Available: ", len(physical_devices))
+print("GPUs Available: ", physical_devices)
 
 # Build the neural network model
 from masif_modules.MaSIF_site import MaSIF_site
