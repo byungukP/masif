@@ -52,9 +52,15 @@ if "pids" not in params:
     params["pids"] = ["p1", "p2"]
 
 # Confirm that TensorFlow is using the GPU
-physical_devices = tf.config.list_physical_devices('GPU')
-print("Num GPUs Available: ", len(physical_devices))
-print("GPUs Available: ", physical_devices)
+## for tf v.2.1 or above
+# physical_devices = tf.config.list_physical_devices('GPU')
+# print("Num GPUs Available: ", len(physical_devices))
+# print("GPUs Available: ", physical_devices)
+
+## for tf v.1.9
+print("All devices available:\n",device_lib.list_local_devices())
+print("All GPUs available:\n",tf.test.is_gpu_available())
+print("All GPUs name:\n",tf.test.gpu_device_name())
 
 # Build the neural network model
 from masif_modules.MaSIF_site import MaSIF_site
