@@ -58,6 +58,7 @@ if "pids" not in params:
 # print("GPUs Available: ", physical_devices)
 
 ## for tf v.1.9
+from tensorflow.python.client import device_lib
 print("All devices available:\n",device_lib.list_local_devices())
 print("All GPUs available:\n",tf.test.is_gpu_available())
 print("All GPUs name:\n",tf.test.gpu_device_name())
