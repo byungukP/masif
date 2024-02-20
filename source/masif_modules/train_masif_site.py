@@ -140,7 +140,11 @@ def train_masif_site(
                 mask = np.load(mydir + pid + "_mask.npy")
                 mask = np.expand_dims(mask, 2)
                 indices = np.load(mydir + pid + "_list_indices.npy", allow_pickle=True, encoding="latin1")
-                # indices is (n_verts x <30), it should be
+                # indice_lists: array of lists, each list representing each patch with indices of vertices that are encompassed in the patch
+                # each indice list of patches starts with index of the center, then vertices inside the patch
+                # max number of indices for patch <= custom_params["max_shape_size"] (default=100)
+                # since some patches may have less than max shape size (100) for patch representation but all the matrix are generated based on max shape size for computational reason,
+                # need padding for matrix of indice list --> pad_indices()
                 indices = pad_indices(indices, mask.shape[1])
                 tmp = np.zeros((len(iface_labels), 2))
                 for i in range(len(iface_labels)):
