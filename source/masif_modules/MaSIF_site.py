@@ -43,13 +43,14 @@ class MaSIF_site:
         grid_theta = np.linspace(range_theta[0], range_theta[1], num=self.n_thetas + 1)
         grid_theta = grid_theta[:-1]
 
+        # Return a list of coordinate matrices from coordinate vectors, shape = (n_theta, n_rho)
         grid_rho_, grid_theta_ = np.meshgrid(grid_rho, grid_theta, sparse=False)
         grid_rho_ = (
             grid_rho_.T
-        )  # the traspose here is needed to have the same behaviour as Matlab code
+        )  # the traspose here is needed to have the same behaviour as Matlab code --> shape = (n_rho, n_theta)
         grid_theta_ = (
             grid_theta_.T
-        )  # the traspose here is needed to have the same behaviour as Matlab code
+        )  # the traspose here is needed to have the same behaviour as Matlab code --> shape = (n_rho, n_theta)
         grid_rho_ = grid_rho_.flatten()
         grid_theta_ = grid_theta_.flatten()
 
