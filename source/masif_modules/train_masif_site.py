@@ -77,6 +77,7 @@ def train_masif_site(
     data_dirs = data_dirs
     n_val = len(data_dirs) // 10
     val_dirs = set(data_dirs[(len(data_dirs) - n_val) :])
+    # Sets use hash lookups and hash functions, which makes searching for an item significantly faster compared to lists
 
     for num_iter in range(num_iterations):
         # Start training epoch:
@@ -187,7 +188,7 @@ def train_masif_site(
                     learning_obj.neg_idx: neg_labels,
                     learning_obj.indices_tensor: indices,
                 }
-
+                # search for val_dirs 1st since it's much faster with small search space of val_dirs
                 if ppi_pair_id in val_dirs:
                     logfile.write("Validating on {} {}\n".format(ppi_pair_id, pid))
                     feed_dict[learning_obj.keep_prob] = 1.0
