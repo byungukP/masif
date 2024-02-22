@@ -186,6 +186,10 @@ class MaSIF_site:
                 mu_theta_initial = np.expand_dims(initial_coords[:, 1], 0).astype(
                     "float32"
                 )
+                # Gaussian Kernel for layer 1
+                # constructing learnable Gaussian Kernels (=learned soft polar grids) defined in a local geodesic polar system
+                # separate kernels for each surface feature (e.g. 5 learnable gaussians with separate parameters for 5 surface features)
+                # the parameters of the Gaussians are learnable on their own
                 self.mu_rho = []
                 self.mu_theta = []
                 self.sigma_rho = []
@@ -209,6 +213,7 @@ class MaSIF_site:
                             name="sigma_theta_{}".format(i),
                         )
                     )  # 1, n_gauss
+                # Gaussian Kernel for layer 2
                 if n_conv_layers > 1:
                     self.mu_rho_l2 = tf.Variable(
                         mu_rho_initial, name="mu_rho_{}".format("l2")
