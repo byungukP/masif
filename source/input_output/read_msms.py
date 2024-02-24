@@ -39,7 +39,7 @@ def read_msms(file_root):
     meshdata = (facefile.read().rstrip()).split("\n")
     facefile.close()
 
-    # Read number of vertices.
+    # Read number of faces.
     header = meshdata[2].split()
     count["faces"] = int(header[0])
     faces = np.zeros((count["faces"], 3), dtype=int)
