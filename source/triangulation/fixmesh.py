@@ -20,10 +20,11 @@ def fix_mesh(mesh, resolution, detail="normal"):
     
     target_len = resolution
     #print("Target resolution: {} mm".format(target_len));
-    # PGC 2017: Remove duplicated vertices first
+    # PGC 2017: Remove duplicated vertices first, two vertices can be considered as duplicates of each other if their Euclidean distance is less than a tolerance (0.001 angstrom)
+    # Duplicate vertices can often be merged into a single vertex.
     mesh, _ = pymesh.remove_duplicated_vertices(mesh, 0.001)
 
-
+    # Degenerate triangles are triangles with collinear vertices (zero area and their normals are undefined)
     count = 0;
     print("Removing degenerated triangles")
     mesh, __ = pymesh.remove_degenerated_triangles(mesh, 100);
