@@ -58,7 +58,7 @@ except:
 if masif_opts['use_hbond']:
     vertex_hbond = computeCharges(out_filename1, vertices1, names1)
 
-# For each surface residue, assign the hydrophobicity of its amino acid. 
+# For each surface residue, assign the hydrophobicity of its amino acid. (residue-level Kyte Doolitle scale)
 if masif_opts['use_hphob']:
     vertex_hphobicity = computeHydrophobicity(names1)
 
