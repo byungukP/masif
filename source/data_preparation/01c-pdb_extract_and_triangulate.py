@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import numpy as np
+import pandas as pd
 import os
 import Bio
 import shutil
@@ -22,6 +23,17 @@ from triangulation.computeCharges import computeCharges, assignChargesToNewMesh
 from triangulation.computeAPBS import computeAPBS
 from triangulation.compute_normal import compute_normal
 from sklearn.neighbors import KDTree
+from pmp_ibs import *
+
+"""
+pdb_extract_and_triangulate.py script for PMP datasets
+all the extraction, trianulation, and precomputation steps are same with orginal script
+except the iface determination
+Updated by ByungUk Park (Feb, 27, 2024)
+
+- should update data_prepare_one.sh with taking argv of whether it is "naive-masif-site" or "PMP-masif-site"
+
+"""
 
 if len(sys.argv) <= 1: 
     print("Usage: {config} "+sys.argv[0]+" PDBID_A")
@@ -87,29 +99,42 @@ if masif_opts['use_hphob']:
 if masif_opts['use_apbs']:
     vertex_charges = computeAPBS(regular_mesh.vertices, out_filename1+".pdb", out_filename1)
 
-iface = np.zeros(len(regular_mesh.vertices))
-if 'compute_iface' in masif_opts and masif_opts['compute_iface']:
-    # Compute the surface of the entire complex and from that compute the interface.
-    v3, f3, _, _, _ = computeMSMS(pdb_filename,\
-        protonate=True)
-    # Regularize the mesh
-    mesh = pymesh.form_mesh(v3, f3)
-    # I believe It is not necessary to regularize the full mesh. This can speed up things by a lot.
-    full_regular_mesh = mesh
-    # Find the vertices that are in the iface.
-    v3 = full_regular_mesh.vertices
-    # Find the distance between every vertex in regular_mesh.vertices and those in the full complex.
-    kdt = KDTree(v3)
-    d, r = kdt.query(regular_mesh.vertices)
-    d = np.square(d) # Square d, because this is how it was in the pyflann version.
-    assert(len(d) == len(regular_mesh.vertices))
-    iface_v = np.where(d >= 2.0)[0]
-    iface[iface_v] = 1.0
-    # Convert to ply and save.
-    save_ply(out_filename1+".ply", regular_mesh.vertices,\
-                        regular_mesh.faces, normals=vertex_normal, charges=vertex_charges,\
-                        normalize_charges=True, hbond=vertex_hbond, hphob=vertex_hphobicity,\
-                        iface=iface)
+"""
+PMP IBS/nonIBS labeling
+- read csv file and get the info on chain_id, resid_id, resid_name
+- match the vertices from regularized_mesh with the IBS from csv
+- save into ply file using save_ply(): ifaces saved as attribute of the mesh object
+- use PDBParser for matching process
+
+"""
+
+csv_path = "/path/to/PMP_data/csv_file.csv"
+
+if not os.path.exists(csv_path):
+    print("csv file for PMP dataset does not exist")
+    sys.exit(1)
+
+# For each surface residue, assign the IBS labels of its amino acid. (residue-level IBS, shape (vertice_num,))
+# iface = np.zeros(len(regular_mesh.vertices))
+
+if 'compute_ibs' in masif_opts and masif_opts['compute_ibs']:
+    # 1. load csv file and save info as array (if loading whole csv every time takes too much time --> save as hash table or npy file and use it as input)
+    pmp_df = pd.read_csv(csv_path)
+    ibs_res_ix = generate_IBSresix(pmp_df, pdb_id, chain_ids1)
+    # 2. crosscheck btw chain_id, resid_number, resname from pmp_dataset.csv and PDBParser attributes
+    if crosscheck_residue(pdb_filename, pmp_df, ibs_res_ix):
+    # 3. match IBS res_ix to vertices index (vix) of old mesh by using chain_id, resid_id, resid_name
+        iface_ = computeIBS(names1, ibs_res_ix)
+    # 4. assign IBS_label on vertices of regularized mesh (nearest neighbor)
+        ibs_vix_old = computeIBS(names1, ibs_res_ix)
+        iface[ibs_vix_old] = 1.0        
+        iface = assignIBSToNewMesh(regular_mesh.vertices, vertices1,\
+                                   iface_)
+        # Convert to ply and save.
+        save_ply(out_filename1+".ply", regular_mesh.vertices,\
+                            regular_mesh.faces, normals=vertex_normal, charges=vertex_charges,\
+                            normalize_charges=True, hbond=vertex_hbond, hphob=vertex_hphobicity,\
+                            iface=iface)
 
 else:
     # Convert to ply and save.
