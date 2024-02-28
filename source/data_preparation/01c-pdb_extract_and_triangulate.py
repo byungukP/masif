@@ -108,7 +108,8 @@ PMP IBS/nonIBS labeling
 
 """
 
-csv_path = "/path/to/PMP_data/csv_file.csv"
+# csv_path = "/path/to/PMP_data/csv_file.csv"
+csv_path = sys.argv[2]
 
 if not os.path.exists(csv_path):
     print("csv file for PMP dataset does not exist")
