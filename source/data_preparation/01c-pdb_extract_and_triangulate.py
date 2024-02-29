@@ -23,7 +23,7 @@ from triangulation.computeCharges import computeCharges, assignChargesToNewMesh
 from triangulation.computeAPBS import computeAPBS
 from triangulation.compute_normal import compute_normal
 from sklearn.neighbors import KDTree
-from pmp_ibs import *
+from pmp_ibs.assignIBS import *
 
 """
 pdb_extract_and_triangulate.py script for PMP datasets
