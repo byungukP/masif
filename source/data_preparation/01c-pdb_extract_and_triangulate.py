@@ -128,8 +128,6 @@ if 'compute_ibs' in masif_opts and masif_opts['compute_ibs']:
     # 3. match IBS res_ix to vertices index (vix) of old mesh by using chain_id, resid_id, resid_name
         iface_ = computeIBS(names1, ibs_res_ix)
     # 4. assign IBS_label on vertices of regularized mesh (nearest neighbor)
-        ibs_vix_old = computeIBS(names1, ibs_res_ix)
-        iface[ibs_vix_old] = 1.0        
         iface = assignIBSToNewMesh(regular_mesh.vertices, vertices1,\
                                    iface_)
         # Convert to ply and save.
