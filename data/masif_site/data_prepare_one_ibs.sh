@@ -26,9 +26,9 @@ fi
 if [ -z $CHAIN2 ]
 then
     echo "Empty"
-    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN1 $2
+    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN1
 else
-    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN1 $2
-    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN2 $2
+    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN1
+    python -W ignore $masif_source/data_preparation/01c-pdb_extract_and_triangulate.py $PDB_ID\_$CHAIN2
 fi
 python $masif_source/data_preparation/04-masif_precompute.py masif_site $PPI_PAIR_ID
